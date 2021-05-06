@@ -27,6 +27,12 @@ weights_ weights of each component
 precisions_cholesky_
 which is a Cholesky decomposition of the precision, the inverse of the covariance matrix
 
+BaysianGaussianMixture
+https://github.com/scikit-learn/scikit-learn/blob/95119c13af77c76e150b753485c662b7c52a41a2/sklearn/mixture/_bayesian_mixture.py
+
+Seem to reuse _estimate_log_gaussian_prob from GMM
+Has an additional term log_lambda
+does not seem to depend on X?
 
 """
 
