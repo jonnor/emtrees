@@ -23,7 +23,10 @@ random = numpy.random.randint(0, 1000)
 print('random_state={}'.format(random))
 
 MODELS = {
-    'GMM': GaussianMixture(),
+    'GMM-full': GaussianMixture(covariance_type='full'),
+    'GMM-tied': GaussianMixture(covariance_type='tied'),
+    'GMM-diag': GaussianMixture(covariance_type='diag'),
+    'GMM-spherical': GaussianMixture(covariance_type='spherical'),
 }
 DATASETS = {
     'binary': datasets.make_classification(n_classes=2, n_samples=100, random_state=random),

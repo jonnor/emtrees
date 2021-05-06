@@ -6,6 +6,29 @@ import numpy
 
 from . import common
 
+# Ref 
+"""
+References
+
+https://github.com/scikit-learn/scikit-learn/blob/95119c13af77c76e150b753485c662b7c52a41a2/sklearn/mixture/_gaussian_mixture.py#L380
+
+https://github.com/scikit-learn/scikit-learn/blob/95119c13af77c76e150b753485c662b7c52a41a2/sklearn/mixture/_base.py
+
+log probability is used
+implementation depends on covariance type. Can be known at fit time
+
+Looks like log_det can be known at fit time
+one constant per component
+
+Stores
+means_ means of each component
+weights_ weights of each component
+
+precisions_cholesky_
+which is a Cholesky decomposition of the precision, the inverse of the covariance matrix
+
+
+"""
 
 class Wrapper:
     def __init__(self, estimator, classifier, dtype='float'):
