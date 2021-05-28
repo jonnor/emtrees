@@ -10,7 +10,7 @@ def convert(estimator, kind=None, method='pymodule', dtype='float'):
         kind = type(estimator).__name__
 
     # Use name instead of instance to avoid hard dependency on the libraries
-    if kind in ['RandomForestClassifier', 'ExtraTreesClassifier', 'DecisionTreeClassifier']:
+    if kind in ['RandomForestClassifier', 'ExtraTreesClassifier', 'DecisionTreeClassifier', 'IsolationForest']:
         return trees.Wrapper(estimator, method, dtype=dtype)
     elif kind == 'MLPClassifier':
         return net.convert_sklearn_mlp(estimator, method)

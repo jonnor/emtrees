@@ -4,7 +4,7 @@ import numpy
 import numpy.testing
 
 from sklearn import datasets
-from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
+from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier, IsolationForest
 from sklearn.tree import DecisionTreeClassifier
 
 import emlearn
@@ -68,3 +68,25 @@ def test_trees_to_dot():
     dot = trees.to_dot(name='ffoo')
     with open('tmp/trees.dot', 'w') as f:
         f.write(dot)
+
+
+OUTLIER_MODELS = {
+    'IsolationForest': IsolationForest(n_estimators=10, random_state=random),
+}
+
+@pytest.mark.parametrize("data", ['binary'])
+@pytest.mark.parametrize("model", OUTLIER_MODELS.keys())
+@pytest.mark.parametrize("method", METHODS)
+def test_trees_sklearn_outlier_score(data, model, method):
+    X, y = DATASETS[data]
+    estimator = OUTLIER_MODELS[model]
+
+    estimator.fit(X, y)
+    cmodel = emlearn.convert(estimator, method=method)
+
+    pred_original = estimator.predict(X[:5])
+    pred_c = cmodel.predict(X[:5])
+
+    numpy.testing.assert_equal(pred_c, pred_original)
+
+
