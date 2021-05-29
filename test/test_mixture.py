@@ -10,7 +10,9 @@ import numpy.testing
 from sklearn import datasets
 from sklearn import model_selection
 from sklearn import preprocessing
+from sklearn import decomposition
 from sklearn.mixture import GaussianMixture
+from sklearn.covariance import EllipticEnvelope
 from sklearn import metrics
 from sklearn.utils.estimator_checks import check_estimator 
 
@@ -27,6 +29,7 @@ MODELS = {
     'GMM-tied': GaussianMixture(n_components=3, covariance_type='tied'),
     'GMM-diag': GaussianMixture(n_components=3, covariance_type='diag'),
     'GMM-spherical': GaussianMixture(n_components=3, covariance_type='spherical'),
+    'EllipticEnvelope': EllipticEnvelope(),
 }
 DATASETS = {
     'binary': datasets.make_classification(n_classes=2, n_features=7, n_samples=100, random_state=random),
@@ -42,11 +45,17 @@ def test_gaussian_mixture_equals_sklearn(data, model, method):
     estimator = MODELS[model]
 
     X = preprocessing.StandardScaler().fit_transform(X)
+    X = decomposition.PCA(3).fit_transform(X)
     estimator.fit(X, y)
 
     cmodel = emlearn.convert(estimator, method=method)
-    
-    pred_original = estimator.predict(X[:5])
-    pred_c = cmodel.predict(X[:5])
+
+    # XXX: only valif for EllipticEnvelope
+    #dist = estimator.mahalanobis(X)    
+    #cdist = cmodel.mahalanobis(X)
+    #numpy.testing.assert_allclose(cdist, dist, rtol=1e-6)
+
+    pred_original = estimator.predict(X)
+    pred_c = cmodel.predict(X)
     numpy.testing.assert_equal(pred_c, pred_original)
 
